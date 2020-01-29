@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Contact Page</title>
+    </head>
+    
+    <body>
+        <!--Definim un endpoint nou de tip post-->
+        <form method="POST" action="/messages">
+            <label for="">Nume</label>
+            <input type="text" name="fullname" value="FirstName"/>
+            <label>Message</label>
+            
+            <!--Daca mai jos intre<> lasam spatiu, browserul o sa interpreteze acest spatiul ab ca un continut pe care il pune in casuta de "Message"-->
+            <textarea name= "message" rows="5" columns="50">
+            </textarea> <br/>
+            <input type="submit" value="Send message"/>
+        
+        </form>
+        
+        
+        <div id="content"></div>
+        
+        
+        
+        <script type="text/javascript">
+        function reqListener () {
+            console.log(this.responseText);
+        
+            var messages = JSON.parse(this.responseText);
+            
+            console.log(messages);
+            
+             var htmlTable = '<table>'
+                
+                 for(var i=0;i<messages.length;i++){
+                    var row = '<tr>'
+                    row=row+'<td>' + messages[i].name + '</td>'
+                    row = row + '<td>' + messages[i].message + '</td>'
+                    row = row + '</tr>'
+                    htmlTable = htmlTable + row;
+                }
+                
+                htmlTable = htmlTable + '</table>'
+                
+                console.log(htmlTable)
+                
+                document.getElementById("content").innerHTML = htmlTable;
+            
+        }
+
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET", "/messages");     
+        oReq.send();
+        
+        </script>
+    </body>
+</html>
+
